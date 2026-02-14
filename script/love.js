@@ -169,12 +169,18 @@ function continueMusic() {
       music.play().catch((error) =>
         console.log("Music playback failed", error)
       );
+    } else {
+      // Первый заход - запустить музыку
+      music.play().catch((error) => console.log("Autoplay prevented", error));
+      localStorage.setItem("musicPlaying", "true");
     }
   }
 
+  // На случай если браузер заблокирует автозапуск
   document.addEventListener("click", function startMusic() {
-    if (music && !isMusicPlaying) {
+    if (music && music.paused) {
       music.play().catch((error) => console.log("Autoplay prevented", error));
+      localStorage.setItem("musicPlaying", "true");
       document.removeEventListener("click", startMusic);
     }
   });
